@@ -34,6 +34,7 @@ class Task2ImplTest {
         assertEquals(3, elements.get(2).getNumber());
         assertEquals(4, elements.get(3).getNumber());
         assertEquals(5, elements.get(4).getNumber());
+        System.out.println(context.getOperationCount());
     }
 
     @Test
@@ -52,6 +53,7 @@ class Task2ImplTest {
         assertEquals(3, elements.get(2).getNumber());
         assertEquals(4, elements.get(3).getNumber());
         assertEquals(5, elements.get(4).getNumber());
+        System.out.println(context.getOperationCount());
     }
 
     @Test
@@ -70,6 +72,7 @@ class Task2ImplTest {
         assertEquals(3, elements.get(2).getNumber());
         assertEquals(4, elements.get(3).getNumber());
         assertEquals(5, elements.get(4).getNumber());
+        System.out.println(context.getOperationCount());
     }
 
     @Test
@@ -77,7 +80,7 @@ class Task2ImplTest {
         IElement element1 = new ElementExampleImpl(context, -10);
         IElement element2 = new ElementExampleImpl(context, 15);
         IElement element3 = new ElementExampleImpl(context, -5);
-        IElement element4 = new ElementExampleImpl(context, -3);
+        IElement element4 = new ElementExampleImpl(context, 1);
         IElement element5 = new ElementExampleImpl(context, 45);
         List<IElement> elements = Stream.of(
                 element5, element1, element3, element2, element4
@@ -88,5 +91,6 @@ class Task2ImplTest {
         assertEquals(3, elements.get(2).getNumber());
         assertEquals(4, elements.get(3).getNumber());
         assertEquals(5, elements.get(4).getNumber());
+        System.out.println(context.getOperationCount());
     }
 }

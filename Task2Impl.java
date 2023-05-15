@@ -14,8 +14,9 @@ import static java.util.stream.Collectors.toSet;
  * большим плюсом (хотя это и не обязательно) будет оценка числа операций, доказательство оптимальности
  * или указание области, в которой алгоритм будет оптимальным.</p>
  */
-public class Task2Impl implements IElementNumberAssigner {
+public class Task2Impl implements IElementNumberAssigner  {
     // ваша реализация должна работать, как singleton. даже при использовании из нескольких потоков.
+
     // Для реализации singleton использовался пятый вариант из источника: https://habr.com/ru/articles/27108/
     private static volatile Task2Impl instance;
 
@@ -32,36 +33,28 @@ public class Task2Impl implements IElementNumberAssigner {
         }
         return instance;
     }
+
     // Нумерация элементов в списке начинается с одного, т.е. n >= 1
     // По итогу получается линейная сложность алгоритма Q(elements.size())
     @Override
-    public void assignNumbers(final List<IElement> elements) {
-        // Ключи, использованные номера; значения - индексы в исходной коллекции elements
+    public void assignNumbers(final List<IElement> elements) throws UnsupportedOperationException {
+        // Ключи - использованные номера; значения - индексы в исходной коллекции
         HashMap<Integer, Integer> usedNumbersAndIndexes = new HashMap<>();
         for (int i = 0; i < elements.size(); i++) {
             usedNumbersAndIndexes.put(elements.get(i).getNumber(), i);
         }
-        // Используемый для освобождения номер, ранее не использовался
-        int nextFreeNumber = nextFreeNumber(usedNumbersAndIndexes.keySet(), elements.size());
         for (int i = 0; i < elements.size(); i++) {
             IElement iElement = elements.get(i);
             if (iElement.getNumber() != i + 1) {
-                // Если номер уже использовался раньше и не меньше того, который мы будем записывать (i + 1)
-                if (usedNumbersAndIndexes.containsKey(i + 1)
-                        && elements.get(usedNumbersAndIndexes.get(i + 1)).getNumber() >= i + 1) {
-                    elements.get(usedNumbersAndIndexes.get(i + 1)).setupNumber(nextFreeNumber);
+                // Если номер уже использовался раньше
+                if (usedNumbersAndIndexes.containsKey(i + 1)) {
+                    Integer index = usedNumbersAndIndexes.get(i + 1);
+                    elements.set(i, elements.get(index));
+                    elements.set(index, iElement);
+                    continue;
                 }
                 iElement.setupNumber(i + 1);
-                nextFreeNumber++;
             }
         }
-    }
-
-    private int nextFreeNumber(Set<Integer> usedNumbers, int collectionSize) {
-        int max = usedNumbers.stream().mapToInt(o -> o).max().orElseThrow(RuntimeException::new);
-        if (max > collectionSize) {
-            return max + 1;
-        }
-        return collectionSize + 1;
     }
 }
